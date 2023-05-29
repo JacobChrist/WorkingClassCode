@@ -1,5 +1,6 @@
 # Working Class Chess Timer
-![](/home/jacob/pontech/pontech/WorkingClassCode/WorkingClassChessTimer/images/IMG_20230527_210255.jpg)
+
+![]([/home/jacob/pontech/pontech/WorkingClassCode/WorkingClassChessTimer/images/IMG_20230527_210255.jpg](https://github.com/JacobChrist/WorkingClassCode/blob/master/WorkingClassChessTimer/images/IMG_20230527_210255.jpg?raw=true))
 The motivation for this project came from spending too much time talking
 to my friend Patrick when we should have been working. Patrick suggested 
 that we needed a chess timer to keep track of who was talking more.  I 
