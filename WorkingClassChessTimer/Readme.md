@@ -1,6 +1,6 @@
 # Working Class Chess Timer
 
-![]([/home/jacob/pontech/pontech/WorkingClassCode/WorkingClassChessTimer/images/IMG_20230527_210255.jpg](https://github.com/JacobChrist/WorkingClassCode/blob/master/WorkingClassChessTimer/images/IMG_20230527_210255.jpg?raw=true))
+![](https://github.com/JacobChrist/WorkingClassCode/blob/master/WorkingClassChessTimer/images/IMG_20230527_210255.jpg?raw=true)
 The motivation for this project came from spending too much time talking
 to my friend Patrick when we should have been working. Patrick suggested 
 that we needed a chess timer to keep track of who was talking more.  I 
@@ -12,7 +12,8 @@ our time talking.  This rule triggers either a RED (too much talking) or
 a GREEN (too much working) LED lights up.
 
 ## Prototype Demonstration
-<iframe width="560" height="315" src="https://www.youtube.com/embed/DWMZuCngSyw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+[![Watch the video](https://img.youtube.com/vi/DWMZuCngSyw/default.jpg)](https://youtu.be/DWMZuCngSyw)
 
 ## The circuit:
   LCD Connections
