@@ -20,10 +20,10 @@
    LCD K pin to 390 Ohm R to ground
 
   Pico Pi W Inputs:
-   GPIO 6 Working Button
-   GPIO 7 Worker 1 Button
-   GPIO 8 Worker 2 Button
-   GPIO 9 Worker 3 Button
+   GPIO 6 10k Ohm pull-up to Working Button
+   GPIO 7 10k Ohm pull-up to Worker 1 Button
+   GPIO 8 10k Ohm pull-up to Worker 2 Button
+   GPIO 9 10k Ohm pull-up to Worker 3 Button
 
   Pico Pi W Outputs:
    GPIO 16 Get to work LED A
@@ -50,6 +50,8 @@ char bin_name[BIN_MAX][10] = {
   "Patrick",
   "Guest"
 };
+
+float percent_talking = 0.10;
 
 void setup() {
   // Button Inputs
@@ -78,42 +80,47 @@ void loop() {
   char line1[100];
   static uint8_t line0_position = 0;
   static uint8_t line1_position = 0;
-  static uint32_t time_last_bin_change = 0;
-  uint32_t time_delta_since_last_bin_change = millis() - time_last_bin_change;
+  static uint32_t time_last_bin_changed = 0;
+  uint32_t time_delta_since_last_bin_changed = millis() - time_last_bin_changed;
   uint32_t time_s[BIN_MAX];
   uint32_t talking = 0;
 
+  // Detect if the worker bin has changed
   if (digitalRead(6) == LOW) bin = 0;
   if (digitalRead(7) == LOW) bin = 1;
   if (digitalRead(8) == LOW) bin = 2;
   if (digitalRead(9) == LOW) bin = 3;
-  if (bin != bin_last) // Our Bin Changed
+
+  // if our bin has changed then reset time_last_bin_changed
+  if (bin != bin_last) 
   {
     if(bin_last >= 0)
-      timer[bin_last] += time_delta_since_last_bin_change;
-    time_last_bin_change = millis();
-    time_delta_since_last_bin_change = millis() - time_last_bin_change;
+      timer[bin_last] += time_delta_since_last_bin_changed;
+    time_last_bin_changed = millis();
+    time_delta_since_last_bin_changed = millis() - time_last_bin_changed;
   }
 
-  //if ( seconds != seconds_last)
+  // Convert current worker time to seconds
+  for (int bin_index = 0; bin_index < BIN_MAX; bin_index++)
   {
-    for (int bin_index = 0; bin_index < BIN_MAX; bin_index++)
-    {
-      time_s[bin_index] = (timer[bin_index] + (bin == bin_index ? time_delta_since_last_bin_change : 0)) / 1000;
-      if(bin_index > 0)
-        talking += time_s[bin_index];
-    }
-    if( talking > (0.20 * time_s[0]) ) {
-        digitalWrite(16, LOW);
-        digitalWrite(17, HIGH);
-    }
-    else
-    {
-        digitalWrite(16, HIGH);
-        digitalWrite(17, LOW);
-    }
+    time_s[bin_index] = (timer[bin_index] + (bin == bin_index ? time_delta_since_last_bin_changed : 0)) / 1000;
+    if(bin_index > 0)
+      talking += time_s[bin_index];
   }
-  sprintf(line0, "Worker=%d %d/%d ", bin, talking, time_s[0]);
+  
+  // Calculate if we are spending too much time talking and light the corasponding LED
+  if( talking > (percent_talking * time_s[0]) ) {
+      digitalWrite(16, LOW);
+      digitalWrite(17, HIGH);
+  }
+  else
+  {
+      digitalWrite(16, HIGH);
+      digitalWrite(17, LOW);
+  }
+
+  // Display Status on LCD
+  sprintf(line0, "Worker#=%d Talking Time=%d Wokring Time=%d ", bin, talking, time_s[0]);
   lcd_scroll(line0, 0, line0_position);
   
   sprintf(line1, "%s:%d %s:%d %s:%d %s:%d ", bin_name[0], time_s[0], 
@@ -125,5 +132,4 @@ void loop() {
 
 
   bin_last = bin;
-  seconds_last = seconds;
 }
